@@ -1,0 +1,80 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+  "name": "proxmox-card",
+  "initializeCommand": ".devcontainer/gen-workspace-env.sh --container-workspace-folder '${containerWorkspaceFolder}' --local-workspace-folder '${localWorkspaceFolder}'",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v5"
+    },
+    "ghcr.io/stuartleeks/dev-container-features/shell-history:0": {},
+    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {
+      "version": 16
+    }
+  },
+
+  "forwardPorts": [],
+
+  "mounts": [
+    // "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    // "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind",
+    // "source=profile,target=/root,type=volume",
+    "target=/root/.vscode-server,type=volume",
+    {
+      "source": "${localEnv:HOME}/.oh-my-zsh/custom/themes/powerlevel10k",
+      "target": "/home/vscode/.oh-my-zsh/custom/themes/powerlevel10k",
+      "type": "bind"
+    },
+    "source=${localEnv:HOME}/.p10k.zsh,target=/home/vscode/.p10k.zsh,type=bind",
+    "source=${localEnv:HOME}/.zshrc,target=/home/vscode/.zshrc,type=bind"
+  ],
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "/workspaces/${localWorkspaceFolderBasename}/tools/scripts/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "YoavBls.pretty-ts-errors",
+        "pflannery.vscode-versionlens",
+        "redhat.vscode-yaml",
+        "aaron-bond.better-comments",
+        "ms-vscode-remote.remote-containers",
+        "pomdtr.excalidraw-editor",
+        "ms-vscode.remote-repositories"
+      ],
+      "settings": {
+        "yaml.customTags": [
+          "!input scalar",
+          "!secret scalar",
+          "!include_dir_named scalar",
+          "!include_dir_list scalar",
+          "!include_dir_merge_list scalar",
+          "!include_dir_merge_named scalar"
+        ]
+      }
+    }
+  }
+
+  // Configure tool-specific properties.
+  // "customizations": {},
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+}

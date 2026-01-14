@@ -1,0 +1,54 @@
+services:
+  devcontainer:
+    # container_name: ${PREFIX}-devcontainer
+    build:
+      context: ../tools/docker
+      dockerfile: Dockerfile
+      args:
+        - ARCH_TYPE=${ARCH_TYPE}
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    volumes:
+      - ${WORKSPACE_SOURCE:?}:${WORKSPACE_TARGET:?}
+      - devConfig:${WORKSPACE_TARGET:?}/.hass_dev
+    #   - nodemodules-volume:${WORKSPACE_NODE_TARGET:?}
+    #   - ${WORKSPACE_ROOT:?}/dist:${WORKSPACE_TARGET:?}/dist
+    command: sleep infinity
+    ports:
+      - "5173:5173"
+
+  ha:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: ${PREFIX:-proxmox-card}-ha
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Toronto
+    ports:
+      - "8123:8123"
+    volumes:
+      - devConfig:/config
+    links:
+      - "devcontainer:dev"
+
+  # db:
+  #   image: postgres:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_DB: postgres
+volumes:
+  devConfig:
+#   # $WORKSPACE_SOURCE is "devcontainer-volume" when the workspace is in a
+#   # volume, and devcontainer-volume is an alias for the actual external volume.
+#   # In bind-mount workspaces, it's an empty, unused volume created by compose.
+#   devcontainer-volume:
+#     name: ${WORKSPACE_CONTAINER_VOLUME_SOURCE:-not-used-in-bind-mount-workspace}
+#     external: ${WORKSPACE_IS_CONTAINER_VOLUME:?}
+# postgres-data:
