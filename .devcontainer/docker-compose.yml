@@ -21,7 +21,7 @@ services:
 
   ha:
     image: ghcr.io/home-assistant/home-assistant:stable
-    container_name: ${PREFIX:-proxmox-card}-ha
+    container_name: local-ha
     restart: unless-stopped
     environment:
       - PUID=1000

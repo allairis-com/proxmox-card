@@ -21,7 +21,7 @@
   ],
   "author": "Jason MacDonald",
   "license": "MIT",
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm",
   "dependencies": {
     "custom-card-helpers": "1.9.0",
     "home-assistant-js-websocket": "9.6.0",

@@ -58,7 +58,9 @@
         "aaron-bond.better-comments",
         "ms-vscode-remote.remote-containers",
         "pomdtr.excalidraw-editor",
-        "ms-vscode.remote-repositories"
+        "ms-vscode.remote-repositories",
+        "JabedHossain.web-preview",
+        "lirobi.phone-preview"
       ],
       "settings": {
         "yaml.customTags": [

@@ -273,6 +273,16 @@ else
   WORKSPACE_IS_BIND_MOUNT="True"
 fi
 
+if command -v dpkg >/dev/null 2>&1; then
+    ARCH_TYPE=$(dpkg --print-architecture)
+else
+    ARCH_TYPE=$(uname -m)
+    case $ARCH_TYPE in
+        x86_64) ARCH_TYPE="amd64" ;;
+        aarch64) ARCH_TYPE="arm64" ;;
+    esac
+fi
+
 ENVARS="$(
 env -i WORKSPACE_CONTAINER_VOLUME_SOURCE="${WORKSPACE_CONTAINER_VOLUME_SOURCE:-}" \
        WORKSPACE_CONTAINER_VOLUME_TARGET="${WORKSPACE_CONTAINER_VOLUME_TARGET:-}" \
@@ -286,9 +296,8 @@ env -i WORKSPACE_CONTAINER_VOLUME_SOURCE="${WORKSPACE_CONTAINER_VOLUME_SOURCE:-}
        WORKSPACE_ROOT="${WORKSPACE_ROOT:?}" \
        WORKSPACE_IS_CONTAINER_VOLUME="${WORKSPACE_IS_CONTAINER_VOLUME:?}" \
        WORKSPACE_IS_BIND_MOUNT="${WORKSPACE_IS_BIND_MOUNT:?}" \
-       #  BRANCH_NAME="${BRANCH_NAME:?}" \
        PREFIX="${PREFIX:-local}" \
-       ARCH_TYPE=$(echo $(dpkg --print-architecture)) \
+       ARCH_TYPE="${ARCH_TYPE}" \
        env
 )"
 echo "$ENVARS"
